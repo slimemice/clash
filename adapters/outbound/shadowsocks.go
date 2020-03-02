@@ -9,12 +9,12 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/Dreamacro/clash/common/structure"
-	"github.com/Dreamacro/clash/component/dialer"
-	obfs "github.com/Dreamacro/clash/component/simple-obfs"
-	"github.com/Dreamacro/clash/component/socks5"
-	v2rayObfs "github.com/Dreamacro/clash/component/v2ray-plugin"
-	C "github.com/Dreamacro/clash/constant"
+	"github.com/slimemice/clash/common/structure"
+	"github.com/slimemice/clash/component/dialer"
+	obfs "github.com/slimemice/clash/component/simple-obfs"
+	"github.com/slimemice/clash/component/socks5"
+	v2rayObfs "github.com/slimemice/clash/component/v2ray-plugin"
+	C "github.com/slimemice/clash/constant"
 
 	"github.com/Dreamacro/go-shadowsocks2/core"
 )

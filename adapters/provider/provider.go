@@ -10,9 +10,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/Dreamacro/clash/adapters/outbound"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/log"
+	"github.com/slimemice/clash/adapters/outbound"
+	C "github.com/slimemice/clash/constant"
+	"github.com/slimemice/clash/log"
 
 	"gopkg.in/yaml.v2"
 )

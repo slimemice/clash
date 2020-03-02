@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Dreamacro/clash/common/queue"
-	C "github.com/Dreamacro/clash/constant"
+	"github.com/slimemice/clash/common/queue"
+	C "github.com/slimemice/clash/constant"
 )
 
 var (

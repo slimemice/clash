@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/log"
-	T "github.com/Dreamacro/clash/tunnel"
+	C "github.com/slimemice/clash/constant"
+	"github.com/slimemice/clash/log"
+	T "github.com/slimemice/clash/tunnel"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"

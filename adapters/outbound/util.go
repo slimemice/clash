@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dreamacro/clash/component/resolver"
-	"github.com/Dreamacro/clash/component/socks5"
-	C "github.com/Dreamacro/clash/constant"
+	"github.com/slimemice/clash/component/resolver"
+	"github.com/slimemice/clash/component/socks5"
+	C "github.com/slimemice/clash/constant"
 )
 
 const (

@@ -7,8 +7,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/Dreamacro/clash/common/cache"
-	"github.com/Dreamacro/clash/log"
+	"github.com/slimemice/clash/common/cache"
+	"github.com/slimemice/clash/log"
 
 	D "github.com/miekg/dns"
 	yaml "gopkg.in/yaml.v2"

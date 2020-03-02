@@ -9,9 +9,9 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/Dreamacro/clash/component/dialer"
-	"github.com/Dreamacro/clash/component/socks5"
-	C "github.com/Dreamacro/clash/constant"
+	"github.com/slimemice/clash/component/dialer"
+	"github.com/slimemice/clash/component/socks5"
+	C "github.com/slimemice/clash/constant"
 )
 
 type Socks5 struct {

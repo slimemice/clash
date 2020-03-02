@@ -2,8 +2,11 @@ NAME=clash
 BINDIR=bin
 VERSION=$(shell git describe --tags || echo "unknown version")
 BUILDTIME=$(shell date -u)
-GOBUILD=CGO_ENABLED=0 go build -ldflags '-X "github.com/Dreamacro/clash/constant.Version=$(VERSION)" \
-		-X "github.com/Dreamacro/clash/constant.BuildTime=$(BUILDTIME)" \
+GOBUILD=CGO_ENABLED=0 go build -ldflags '-X "github.com/slimemice/clash/constant.Version=$(VERSION)" \
+		-X "github.com/slimemice/clash/constant.BuildTime=$(BUILDTIME)" \
+		-w -s'
+SOBUILD=CGO_ENABLED=1 go build -ldflags '-X "github.com/slimemice/clash/constant.Version=$(VERSION)" \
+		-X "github.com/slimemice/clash/constant.BuildTime=$(BUILDTIME)" \
 		-w -s'
 
 PLATFORM_LIST = \
@@ -79,6 +82,9 @@ windows-386:
 
 windows-amd64:
 	GOARCH=amd64 GOOS=windows $(GOBUILD) -o $(BINDIR)/$(NAME)-$@.exe
+
+android:
+	GOARCH=arm64 GOOS=android CXX=$(ANDROID_NDK_HOME)toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android21-clang++.cmd CC=$(ANDROID_NDK_HOME)toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android21-clang.cmd LD=$(ANDROID_NDK_HOME)toolchains/llvm/prebuilt/windows-x86_64/bin/aarch64-linux-android-ld.exe $(SOBUILD) -o $(BINDIR)/$(NAME)-$@
 
 gz_releases=$(addsuffix .gz, $(PLATFORM_LIST))
 zip_releases=$(addsuffix .zip, $(WINDOWS_ARCH_LIST))

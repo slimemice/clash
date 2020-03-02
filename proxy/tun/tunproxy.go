@@ -6,12 +6,12 @@ import (
 	"net/url"
 	"strings"
 
-	adapters "github.com/Dreamacro/clash/adapters/inbound"
-	"github.com/Dreamacro/clash/component/socks5"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/log"
-	"github.com/Dreamacro/clash/proxy/tun/dev"
-	tun "github.com/Dreamacro/clash/tunnel"
+	adapters "github.com/slimemice/clash/adapters/inbound"
+	"github.com/slimemice/clash/component/socks5"
+	C "github.com/slimemice/clash/constant"
+	"github.com/slimemice/clash/log"
+	"github.com/slimemice/clash/proxy/tun/dev"
+	tun "github.com/slimemice/clash/tunnel"
 
 	"encoding/binary"
 

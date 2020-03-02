@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/Dreamacro/clash/dns"
-	"github.com/Dreamacro/clash/log"
+	"github.com/slimemice/clash/dns"
+	"github.com/slimemice/clash/log"
 	"github.com/google/netstack/tcpip"
 	"github.com/google/netstack/tcpip/adapters/gonet"
 	"github.com/google/netstack/tcpip/buffer"

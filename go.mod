@@ -1,4 +1,4 @@
-module github.com/Dreamacro/clash
+module github.com/slimemice/clash
 
 go 1.13
 
@@ -15,6 +15,7 @@ require (
 	github.com/miekg/dns v1.1.27
 	github.com/oschwald/geoip2-golang v1.4.0
 	github.com/sirupsen/logrus v1.4.2
+	github.com/slimemice/shadowsocksR v0.0.0-20200302024915-f018bc886697
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20200214034016-1d94cc7ab1c6
 	golang.org/x/net v0.0.0-20200202094626-16171245cfb2

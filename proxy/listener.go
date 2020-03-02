@@ -5,14 +5,14 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/Dreamacro/clash/component/resolver"
-	"github.com/Dreamacro/clash/config"
-	"github.com/Dreamacro/clash/dns"
+	"github.com/slimemice/clash/component/resolver"
+	"github.com/slimemice/clash/config"
+	"github.com/slimemice/clash/dns"
 
-	"github.com/Dreamacro/clash/proxy/http"
-	"github.com/Dreamacro/clash/proxy/redir"
-	"github.com/Dreamacro/clash/proxy/socks"
-	"github.com/Dreamacro/clash/proxy/tun"
+	"github.com/slimemice/clash/proxy/http"
+	"github.com/slimemice/clash/proxy/redir"
+	"github.com/slimemice/clash/proxy/socks"
+	"github.com/slimemice/clash/proxy/tun"
 )
 
 var (

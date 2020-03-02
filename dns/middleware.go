@@ -3,8 +3,8 @@ package dns
 import (
 	"strings"
 
-	"github.com/Dreamacro/clash/component/fakeip"
-	"github.com/Dreamacro/clash/log"
+	"github.com/slimemice/clash/component/fakeip"
+	"github.com/slimemice/clash/log"
 
 	D "github.com/miekg/dns"
 )

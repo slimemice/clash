@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net"
 
-	"github.com/Dreamacro/clash/common/pool"
-	"github.com/Dreamacro/clash/component/socks5"
+	"github.com/slimemice/clash/common/pool"
+	"github.com/slimemice/clash/component/socks5"
 )
 
 type fakeConn struct {

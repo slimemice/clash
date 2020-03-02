@@ -3,8 +3,8 @@ package outbound
 import (
 	"fmt"
 
-	"github.com/Dreamacro/clash/common/structure"
-	C "github.com/Dreamacro/clash/constant"
+	"github.com/slimemice/clash/common/structure"
+	C "github.com/slimemice/clash/constant"
 )
 
 func ParseProxy(mapping map[string]interface{}) (C.Proxy, error) {
@@ -24,6 +24,13 @@ func ParseProxy(mapping map[string]interface{}) (C.Proxy, error) {
 			break
 		}
 		proxy, err = NewShadowSocks(*ssOption)
+	case "ssr":
+		ssrOption := &ShadowsocksROption{}
+		err = decoder.Decode(mapping, ssrOption)
+		if err != nil {
+			break
+		}
+		proxy, err = NewShadowsocksR(*ssrOption)
 	case "socks5":
 		socksOption := &Socks5Option{}
 		err = decoder.Decode(mapping, socksOption)

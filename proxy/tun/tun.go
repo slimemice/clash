@@ -1,6 +1,6 @@
 package tun
 
-import "github.com/Dreamacro/clash/dns"
+import "github.com/slimemice/clash/dns"
 
 // TunAdapter hold the state of tun/tap interface
 type TunAdapter interface {

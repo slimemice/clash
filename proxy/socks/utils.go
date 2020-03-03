@@ -1,7 +1,6 @@
 package socks
 
 import (
-	"errors"
 	"net"
 
 	"github.com/Dreamacro/clash/common/pool"
@@ -21,17 +20,6 @@ func (c *fakeConn) Data() []byte {
 
 // WriteBack wirtes UDP packet with source(ip, port) = `addr`
 func (c *fakeConn) WriteBack(b []byte, addr net.Addr) (n int, err error) {
-	if addr == nil {
-		err = errors.New("Invalid udp packet")
-		return
-	}
-
-	udpaddr, ok := addr.(*net.UDPAddr)
-	if !ok || udpaddr == nil {
-		err = errors.New("Invalid udp packet")
-		return
-	}
-
 	packet, err := socks5.EncodeUDPPacket(socks5.ParseAddrToSocksAddr(addr), b)
 	if err != nil {
 		return

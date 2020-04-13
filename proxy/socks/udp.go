@@ -5,6 +5,7 @@ import (
 
 	adapters "github.com/slimemice/clash/adapters/inbound"
 	"github.com/slimemice/clash/common/pool"
+	"github.com/slimemice/clash/common/sockopt"
 	"github.com/slimemice/clash/component/socks5"
 	C "github.com/slimemice/clash/constant"
 	"github.com/slimemice/clash/tunnel"
@@ -18,6 +19,11 @@ type SockUDPListener struct {
 
 func NewSocksUDPProxy(addr string) (*SockUDPListener, error) {
 	l, err := net.ListenPacket("udp", addr)
+	if err != nil {
+		return nil, err
+	}
+
+	err = sockopt.UDPReuseaddr(l.(*net.UDPConn))
 	if err != nil {
 		return nil, err
 	}

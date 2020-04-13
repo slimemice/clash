@@ -19,23 +19,25 @@
 
 ## Features
 
-- Local HTTP/HTTPS/SOCKS server
-- GeoIP rule support
-- Supports Vmess, Shadowsocks, Snell and SOCKS5 protocol
-- Supports Netfilter TCP redirecting
-- Comprehensive HTTP API
+- Local HTTP/HTTPS/SOCKS server with/without authentication
+- VMess, Shadowsocks, Trojan (experimental), Snell protocol support for remote connections. UDP is supported.
+- Built-in DNS server that aims to minimize DNS pollution attacks, supports DoH/DoT upstream. Fake IP is also supported.
+- Rules based off domains, GEOIP, IP CIDR or ports to forward packets to different nodes
+- Remote groups allow users to implement powerful rules. Supports automatic fallback, load balancing or auto select node based off latency
+- Remote providers, allowing users to get node lists remotely instead of hardcoding in config
+- Netfilter TCP redirecting. You can deploy Clash on your Internet gateway with `iptables`.
+- Comprehensive HTTP API controller
 
 ## Install
 
-Clash Requires Go >= 1.13. You can build it from source:
+Clash requires Go >= 1.13. You can build it from source:
 
 ```sh
 $ go get -u -v github.com/Dreamacro/clash
 ```
 
-Pre-built binaries are available here: [release](https://github.com/Dreamacro/clash/releases)
-
-Pre-built TUN mode binaries are available here: [TUN release](https://github.com/Dreamacro/clash/releases/tag/TUN)
+Pre-built binaries are available here: [release](https://github.com/Dreamacro/clash/releases)  
+Pre-built TUN mode binaries are available here: [TUN release](https://github.com/Dreamacro/clash/releases/tag/TUN). Source is not currently available.
 
 Check Clash version with:
 
@@ -43,21 +45,17 @@ Check Clash version with:
 $ clash -v
 ```
 
-## Daemon
+## Daemonize Clash
 
-Unfortunately, there is no native and elegant way to implement daemons on Golang.
+Unfortunately, there is no native or elegant way to implement daemons on Golang. We recommend using third-party daemon management tools like PM2, Supervisor or the like to keep Clash running as a service.
 
-So we can use third-party daemon tools like PM2, Supervisor or the like.
-
-In the case of [pm2](https://github.com/Unitech/pm2), we can start the daemon this way:
+In the case of [pm2](https://github.com/Unitech/pm2), start the daemon this way:
 
 ```sh
 $ pm2 start clash
 ```
 
-If you have Docker installed, you can run clash directly using `docker-compose`.
-
-[Run clash in docker](https://github.com/Dreamacro/clash/wiki/Run-clash-in-docker)
+If you have Docker installed, it's recommended to deploy Clash directly using `docker-compose`: [run Clash in Docker](https://github.com/Dreamacro/clash/wiki/Run-clash-in-docker)
 
 ## Config
 
@@ -94,7 +92,7 @@ allow-lan: false
 # "[aaaa::a8aa:ff:fe09:57d8]": bind a single IPv6 address
 # bind-address: "*"
 
-# Rule / Global/ Direct (default is Rule)
+# Rule / Global / Direct (default is Rule)
 mode: Rule
 
 # set log level to stdout (default is info)
@@ -211,6 +209,24 @@ proxies:
     # ws-path: /path
     # ws-headers:
     #   Host: v2ray.com
+  
+  - name: "vmess-http"
+    type: vmess
+    server: server
+    port: 443
+    uuid: uuid
+    alterId: 32
+    cipher: auto
+    # udp: true
+    # network: http
+    # http-opts:
+    #   # method: "GET"
+    #   # path:
+    #   #   - '/'
+    #   #   - '/video'
+    #   # headers:
+    #   #   Connection:
+    #   #     - keep-alive
 
   # socks5
   - name: "socks"
@@ -243,7 +259,30 @@ proxies:
       # mode: http # or tls
       # host: bing.com
 
+  # trojan
+  - name: "trojan"
+    type: trojan
+    server: server
+    port: 443
+    password: yourpsk
+    # udp: true
+    # sni: example.com # aka server name
+    # alpn:
+    #   - h2
+    #   - http/1.1
+    # skip-cert-verify: true
+
 proxy-groups:
+  # relay chains the proxies. proxies shall not contain a proxy-group. No UDP support.
+  # Traffic: clash <-> http <-> vmess <-> ss1 <-> ss2 <-> Internet
+  - name: "relay"
+    type: relay
+    proxies:
+      - http
+      - vmess
+      - ss1
+      - ss2
+
   # url-test select which proxy will be used by benchmarking speed to a URL.
   - name: "auto"
     type: url-test
@@ -334,7 +373,7 @@ rules:
 ## Documentations
 https://clash.gitbook.io/
 
-## Thanks
+## Credits
 
 [riobard/go-shadowsocks2](https://github.com/riobard/go-shadowsocks2)
 

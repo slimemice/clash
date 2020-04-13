@@ -46,7 +46,12 @@ func ParseProxy(mapping map[string]interface{}) (C.Proxy, error) {
 		}
 		proxy = NewHttp(*httpOption)
 	case "vmess":
-		vmessOption := &VmessOption{}
+		vmessOption := &VmessOption{
+			HTTPOpts: HTTPOptions{
+				Method: "GET",
+				Path:   []string{"/"},
+			},
+		}
 		err = decoder.Decode(mapping, vmessOption)
 		if err != nil {
 			break
@@ -59,6 +64,13 @@ func ParseProxy(mapping map[string]interface{}) (C.Proxy, error) {
 			break
 		}
 		proxy, err = NewSnell(*snellOption)
+	case "trojan":
+		trojanOption := &TrojanOption{}
+		err = decoder.Decode(mapping, trojanOption)
+		if err != nil {
+			break
+		}
+		proxy, err = NewTrojan(*trojanOption)
 	default:
 		return nil, fmt.Errorf("Unsupport proxy type: %s", proxyType)
 	}

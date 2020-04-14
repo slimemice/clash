@@ -95,7 +95,7 @@ func (ssrins *ShadowsocksR) DialContext(ctx context.Context, metadata *C.Metadat
 		_ = dstcon.Close()
 		return nil, err
 	}
-	return newConn(dstcon, ssrins), err
+	return NewConn(dstcon, ssrins), err
 
 }
 

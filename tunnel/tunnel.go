@@ -182,6 +182,12 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 		return
 	}
 
+	// make a fAddr if requset ip is fakeip
+	var fAddr net.Addr
+	if enhancedMode != nil && enhancedMode.IsFakeIP(metadata.DstIP) {
+		fAddr = metadata.UDPAddr()
+	}
+
 	if err := preHandleMetadata(metadata); err != nil {
 		log.Debugln("[Metadata PreHandle] error: %s", err)
 		return
@@ -215,7 +221,12 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 				wg.Done()
 				return
 			}
-			pc = newUDPTracker(rawPc, DefaultManager, metadata, rule)
+
+			if chain := rawPc.Chains(); len(chain) > 0 && chain[0] != "DIRECT" {
+				pc = newUDPTracker(rawPc, DefaultManager, metadata, rule)
+			} else {
+				pc = rawPc
+			}
 
 			switch true {
 			case rule != nil:
@@ -231,7 +242,7 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 			natTable.Set(key, pc)
 			natTable.Delete(lockKey)
 			wg.Done()
-			go handleUDPToLocal(packet.UDPPacket, pc, key)
+			go handleUDPToLocal(packet.UDPPacket, pc, key, fAddr)
 		}
 
 		wg.Wait()
@@ -267,7 +278,11 @@ func handleTCPConn(localConn C.ServerAdapter) {
 		log.Warnln("dial %s error: %s", proxy.Name(), err.Error())
 		return
 	}
-	remoteConn = newTCPTracker(remoteConn, DefaultManager, metadata, rule)
+
+	if chain := remoteConn.Chains(); len(chain) > 0 && chain[0] != "DIRECT" {
+		remoteConn = newTCPTracker(remoteConn, DefaultManager, metadata, rule)
+	}
+
 	defer remoteConn.Close()
 
 	switch true {

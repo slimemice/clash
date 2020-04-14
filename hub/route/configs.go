@@ -65,13 +65,6 @@ func patchConfigs(w http.ResponseWriter, r *http.Request) {
 	P.ReCreateHTTP(pointerOrDefault(general.Port, ports.Port))
 	P.ReCreateSocks(pointerOrDefault(general.SocksPort, ports.SocksPort))
 	P.ReCreateRedir(pointerOrDefault(general.RedirPort, ports.RedirPort))
-	if general.Tun != nil {
-		if err := P.ReCreateTun(*general.Tun); err != nil {
-			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, newError(err.Error()))
-			return
-		}
-	}
 
 	if general.Mode != nil {
 		tunnel.SetMode(*general.Mode)

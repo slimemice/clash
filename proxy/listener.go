@@ -5,14 +5,10 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/slimemice/clash/component/resolver"
-	"github.com/slimemice/clash/config"
-	"github.com/slimemice/clash/dns"
-
+	"github.com/slimemice/clash/log"
 	"github.com/slimemice/clash/proxy/http"
 	"github.com/slimemice/clash/proxy/redir"
 	"github.com/slimemice/clash/proxy/socks"
-	"github.com/slimemice/clash/proxy/tun"
 )
 
 var (
@@ -23,7 +19,7 @@ var (
 	socksUDPListener *socks.SockUDPListener
 	httpListener     *http.HttpListener
 	redirListener    *redir.RedirListener
-	tunAdapter       tun.TunAdapter
+	redirUDPListener *redir.RedirUDPListener
 )
 
 type listener interface {
@@ -47,17 +43,6 @@ func BindAddress() string {
 
 func SetAllowLan(al bool) {
 	allowLan = al
-}
-
-func Tun() config.Tun {
-	if tunAdapter == nil {
-		return config.Tun{}
-	}
-	return config.Tun{
-		Enable:    true,
-		DeviceURL: tunAdapter.DeviceURL(),
-		DNSListen: tunAdapter.DNSListen(),
-	}
 }
 
 func SetBindAddress(host string) {
@@ -148,6 +133,14 @@ func ReCreateRedir(port int) error {
 		redirListener = nil
 	}
 
+	if redirUDPListener != nil {
+		if redirUDPListener.Address() == addr {
+			return nil
+		}
+		redirUDPListener.Close()
+		redirUDPListener = nil
+	}
+
 	if portIsZero(addr) {
 		return nil
 	}
@@ -158,33 +151,14 @@ func ReCreateRedir(port int) error {
 		return err
 	}
 
+	redirUDPListener, err = redir.NewRedirUDPProxy(addr)
+	if err != nil {
+		log.Warnln("Failed to start Redir UDP Listener: %s", err)
+	}
+
 	return nil
 }
 
-func ReCreateTun(conf config.Tun) error {
-	enable := conf.Enable
-	url := conf.DeviceURL
-	if tunAdapter != nil {
-		if enable && (url == "" || url == tunAdapter.DeviceURL()) {
-			// Though we don't need to recreate tun device, we should update tun DNSServer
-			return tunAdapter.ReCreateDNSServer(resolver.DefaultResolver.(*dns.Resolver), conf.DNSListen)
-		}
-		tunAdapter.Close()
-		tunAdapter = nil
-	}
-	if !enable {
-		return nil
-	}
-	var err error
-	tunAdapter, err = tun.NewTunProxy(url)
-	if err != nil {
-		return err
-	}
-	if resolver.DefaultResolver != nil {
-		return tunAdapter.ReCreateDNSServer(resolver.DefaultResolver.(*dns.Resolver), conf.DNSListen)
-	}
-	return nil
-}
 
 // GetPorts return the ports of proxy servers
 func GetPorts() *Ports {

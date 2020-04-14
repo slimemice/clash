@@ -99,7 +99,6 @@ func GetGeneral() *config.General {
 		Port:           ports.Port,
 		SocksPort:      ports.SocksPort,
 		RedirPort:      ports.RedirPort,
-		Tun:            P.Tun(),
 		Authentication: authenticator,
 		AllowLan:       P.AllowLan(),
 		BindAddress:    P.BindAddress(),
@@ -193,10 +192,6 @@ func updateGeneral(general *config.General) {
 
 	if err := P.ReCreateRedir(general.RedirPort); err != nil {
 		log.Errorln("Start Redir server error: %s", err.Error())
-	}
-
-	if err := P.ReCreateTun(general.Tun); err != nil {
-		log.Errorln("Start Tun interface error: %s", err.Error())
 	}
 
 }

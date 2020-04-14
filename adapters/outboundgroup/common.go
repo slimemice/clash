@@ -11,6 +11,12 @@ const (
 	defaultGetProxiesDuration = time.Second * 5
 )
 
+type ProxyGroup interface {
+	C.ProxyAdapter
+	GetProxyProviders() []provider.ProxyProvider
+	Now() string
+}
+
 func getProvidersProxies(providers []provider.ProxyProvider) []C.Proxy {
 	proxies := []C.Proxy{}
 	for _, provider := range providers {

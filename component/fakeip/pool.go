@@ -89,6 +89,11 @@ func (p *Pool) Gateway() net.IP {
 	return uintToIP(p.gateway)
 }
 
+// OverrideHostFrom override p host by r.host
+func (p *Pool) OverrideHostFrom(r *Pool) {
+	p.host = r.host
+}
+
 func (p *Pool) get(host string) net.IP {
 	current := p.offset
 	for {

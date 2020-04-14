@@ -8,8 +8,8 @@ import (
 )
 
 const (
+	defaultURLTestTimeout = time.Second * 3
 	defaultURLTestURL     = "https://www.gstatic.com/generate_204"
-	defaultURLTestTimeout = time.Second * 5
 )
 
 type HealthCheckOption struct {
@@ -62,7 +62,7 @@ func (hc *HealthCheck) close() {
 }
 
 func NewHealthCheck(proxies []C.Proxy, url string, interval uint) *HealthCheck {
-	if len(url) == 0 {
+	if url == "" {
 		url = defaultURLTestURL
 	}
 

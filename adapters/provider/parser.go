@@ -3,7 +3,6 @@ package provider
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
 	"time"
 
 	"github.com/slimemice/clash/common/structure"
@@ -42,7 +41,7 @@ func ParseProxyProvider(name string, mapping map[string]interface{}, baseDir str
 	}
 	hc := NewHealthCheck([]C.Proxy{}, schema.HealthCheck.URL, hcInterval)
 
-	path := filepath.Join(baseDir, schema.Path)
+	path := baseDir + "/" + schema.Path
 
 	var vehicle Vehicle
 	switch schema.Type {

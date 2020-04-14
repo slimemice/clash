@@ -115,14 +115,20 @@ type RawConfig struct {
 	ExternalUI         string       `yaml:"external-ui"`
 	Secret             string       `yaml:"secret"`
 
-	ProxyProvider map[string]map[string]interface{} `yaml:"proxy-provider"`
+	ProxyProvider map[string]map[string]interface{} `yaml:"proxy-providers"`
 	Hosts         map[string]string                 `yaml:"hosts"`
 	DNS           RawDNS                            `yaml:"dns"`
     Tun           Tun                               `yaml:"tun"`
 	Experimental  Experimental                      `yaml:"experimental"`
-	Proxy         []map[string]interface{}          `yaml:"Proxy"`
-	ProxyGroup    []map[string]interface{}          `yaml:"Proxy Group"`
-	Rule          []string                          `yaml:"Rule"`
+	Proxy         []map[string]interface{}          `yaml:"proxies"`
+	ProxyGroup    []map[string]interface{}          `yaml:"proxy-groups"`
+	Rule          []string                          `yaml:"rules"`
+
+	// remove after 1.0
+	ProxyProviderOld map[string]map[string]interface{} `yaml:"proxy-provider"`
+	ProxyOld         []map[string]interface{}          `yaml:"Proxy"`
+	ProxyGroupOld    []map[string]interface{}          `yaml:"Proxy Group"`
+	RuleOld          []string                          `yaml:"Rule"`
 }
 
 // Parse config
@@ -167,6 +173,11 @@ func UnmarshalRawConfig(buf []byte) (*RawConfig, error) {
 				"8.8.8.8",
 			},
 		},
+
+		// remove after 1.0
+		RuleOld:       []string{},
+		ProxyOld:      []map[string]interface{}{},
+		ProxyGroupOld: []map[string]interface{}{},
 	}
 
 	if err := yaml.Unmarshal(buf, &rawCfg); err != nil {
@@ -262,6 +273,18 @@ func parseProxies(cfg *RawConfig, baseDir string) (proxies map[string]C.Proxy, p
 	groupsConfig := cfg.ProxyGroup
 	providersConfig := cfg.ProxyProvider
 
+	if len(proxiesConfig) == 0 {
+		proxiesConfig = cfg.ProxyOld
+	}
+
+	if len(groupsConfig) == 0 {
+		groupsConfig = cfg.ProxyGroupOld
+	}
+
+	if len(providersConfig) == 0 {
+		providersConfig = cfg.ProxyProviderOld
+	}
+
 	defer func() {
 		// Destroy already created provider when err != nil
 		if err != nil {
@@ -289,7 +312,7 @@ func parseProxies(cfg *RawConfig, baseDir string) (proxies map[string]C.Proxy, p
 		proxyList = append(proxyList, proxy.Name())
 	}
 
-	// keep the origional order of ProxyGroups in config file
+	// keep the original order of ProxyGroups in config file
 	for idx, mapping := range groupsConfig {
 		groupName, existName := mapping["name"].(string)
 		if !existName {
@@ -368,6 +391,12 @@ func parseRules(cfg *RawConfig, proxies map[string]C.Proxy) ([]C.Rule, error) {
 	rules := []C.Rule{}
 
 	rulesConfig := cfg.Rule
+
+	// remove after 1.0
+	if len(rulesConfig) == 0 {
+		rulesConfig = cfg.RuleOld
+	}
+
 	// parse rules
 	for idx, line := range rulesConfig {
 		rule := trimArr(strings.Split(line, ","))

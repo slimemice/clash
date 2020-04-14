@@ -6,7 +6,7 @@ GOBUILD=CGO_ENABLED=0 go build -ldflags '-X "github.com/slimemice/clash/constant
 		-X "github.com/slimemice/clash/constant.BuildTime=$(BUILDTIME)" \
 		-w -s'
 SOBUILD=CGO_ENABLED=1 go build -ldflags '-X "github.com/slimemice/clash/constant.Version=$(VERSION)" \
-		-X "github.com/fuckgfwtool/clash/constant.BuildTime=$(BUILDTIME)" \
+		-X "github.com/slimemice/clash/constant.BuildTime=$(BUILDTIME)" \
 		-w -s'
 
 PLATFORM_LIST = \

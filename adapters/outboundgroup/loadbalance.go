@@ -21,6 +21,14 @@ type LoadBalance struct {
 	providers []provider.ProxyProvider
 }
 
+func (lb *LoadBalance) GetProxyProviders() []provider.ProxyProvider {
+	return lb.providers
+}
+
+func (lb *LoadBalance) Now() string {
+	return ""
+}
+
 func getKey(metadata *C.Metadata) string {
 	if metadata.Host != "" {
 		// ip host
@@ -124,7 +132,7 @@ func (lb *LoadBalance) MarshalJSON() ([]byte, error) {
 
 func NewLoadBalance(name string, providers []provider.ProxyProvider) *LoadBalance {
 	return &LoadBalance{
-		Base:      outbound.NewBase(name, C.LoadBalance, false),
+		Base:      outbound.NewBase(name, "", C.LoadBalance, false),
 		single:    singledo.NewSingle(defaultGetProxiesDuration),
 		maxRetry:  3,
 		providers: providers,

@@ -15,7 +15,7 @@ var (
 
 type Server struct {
 	*D.Server
-	handler handler
+	handler Handler
 }
 
 func (s *Server) ServeDNS(w D.ResponseWriter, r *D.Msg) {
@@ -27,14 +27,14 @@ func (s *Server) ServeDNS(w D.ResponseWriter, r *D.Msg) {
 	s.handler(w, r)
 }
 
-func (s *Server) SetHandler(handler handler) {
+func (s *Server) setHandler(handler Handler) {
 	s.handler = handler
 }
 
 func ReCreateServer(addr string, resolver *Resolver) error {
 	if addr == address && resolver != nil {
 		handler := NewHandler(resolver)
-		server.SetHandler(handler)
+		server.setHandler(handler)
 		return nil
 	}
 

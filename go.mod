@@ -10,7 +10,6 @@ require (
 	github.com/go-chi/render v1.0.1
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/google/btree v1.0.0 // indirect
-	github.com/google/netstack v0.0.0-00010101000000-000000000000 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/miekg/dns v1.1.29
 	github.com/oschwald/geoip2-golang v1.4.0
@@ -24,5 +23,3 @@ require (
 	gopkg.in/eapache/channels.v1 v1.1.0
 	gopkg.in/yaml.v2 v2.2.8
 )
-
-replace github.com/google/netstack => github.com/comzyh/netstack v0.0.0-20191217044024-67c27819ada4
